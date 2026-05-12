@@ -1,5 +1,5 @@
-/**
- * 統晉企業 · 系統 ↔ Google Sheets/Drive 同步 v2
+﻿/**
+ * 業務系統 ↔ Google Sheets/Drive 同步 v2
  *
  * 變更內容（相對於 v1）：
  *   - handleDeletes 回傳新增 deletedIds / notFoundIds 兩個陣列，
@@ -69,7 +69,7 @@ function _ensureTextFormat(sheet, headers, rowNum) {
 function doGet(e) {
   return _json({
     ok: true,
-    message: '統晉企業同步服務運作中',
+    message: '業務系統同步服務運作中',
     timestamp: new Date().toISOString()
   });
 }
@@ -602,3 +602,4 @@ function testDelete() {
   ]);
   Logger.log(JSON.stringify(result, null, 2));
 }
+

@@ -4261,7 +4261,7 @@ function SignForm({onClose,onSubmit,crmData,machData,quoteDb,workOrders,editReco
           <div style={{background:WORK_DOC_COLOR,padding:'16px 18px',display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
             <div>
               <div style={{fontSize:8,fontWeight:800,letterSpacing:4,color:'rgba(255,255,255,.6)',marginBottom:3}}>SERVICE DOCUMENT</div>
-              <div style={{fontSize:18,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'統晉企業有限公司'}</div>
+              <div style={{fontSize:18,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'XX企業有限公司'}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,.6)',marginTop:2}}>{co.slogan||'製冰機、洗碗機｜出租、維修、買賣'}</div>
             </div>
             <div style={{textAlign:'right',flexShrink:0}}>
@@ -4671,7 +4671,7 @@ function WorkOrderViewer({rec, onSignStaff, onSignCust, onChangePay, onResign, e
         <div style={{background:SC,padding:'14px 18px',display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
           <div>
             <div style={{fontSize:8,fontWeight:800,letterSpacing:4,color:'rgba(255,255,255,.6)',marginBottom:3}}>SERVICE DOCUMENT</div>
-            <div style={{fontSize:17,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'統晉企業有限公司'}</div>
+            <div style={{fontSize:17,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'XX企業有限公司'}</div>
             <div style={{fontSize:10,color:'rgba(255,255,255,.6)',marginTop:2}}>{co.slogan||'製冰機、洗碗機｜出租、維修、買賣'}</div>
           </div>
           <div style={{textAlign:'right',flexShrink:0}}>
@@ -5763,7 +5763,7 @@ async function generatePaymentListPDF({customer, kind, items, isCompany, company
   
   div.innerHTML = `
     <div style="text-align:center;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #000">
-      <div style="font-size:18px;font-weight:900;letter-spacing:3px">${co.name||'統晉企業'}</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:3px">${co.name||'XX企業'}</div>
       <div style="font-size:14px;font-weight:700;margin-top:6px">收款清單 — ${customer}</div>
       <div style="font-size:11px;color:#666;margin-top:4px">區間：${kind}（截至 ${today}）</div>
       ${subtitle}
@@ -7247,9 +7247,9 @@ function CompanySettingsPage(){
 
       <div style={{background:'#111',borderRadius:12,padding:'18px',border:'1px solid #222'}}>
         <label style={lbl}>公司名稱（合約 / 簽單抬頭用）</label>
-        <input value={data.name||''} onChange={e=>upd('name',e.target.value)} style={si} placeholder="統晉企業有限公司"/>
+        <input value={data.name||''} onChange={e=>upd('name',e.target.value)} style={si} placeholder="XX企業有限公司"/>
         <label style={lbl}>系統 TITLE（登入頁顯示）</label>
-        <input value={data.systemTitle||''} onChange={e=>upd('systemTitle',e.target.value)} style={si} placeholder="統晉企業"/>
+        <input value={data.systemTitle||''} onChange={e=>upd('systemTitle',e.target.value)} style={si} placeholder="XX企業"/>
         <label style={lbl}>副標 / 業務範圍（簽單、PDF 標頭用）</label>
         <input value={data.slogan||''} onChange={e=>upd('slogan',e.target.value)} style={si} placeholder="製冰機、洗碗機｜出租、維修、買賣"/>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
@@ -8785,7 +8785,7 @@ function LoginScreen({onLogin}){
     <div style={{position:'fixed',inset:0,background:'#0a0a0a',display:'flex',alignItems:'center',justifyContent:'center',padding:20,zIndex:9999}}>
       <div style={{maxWidth:380,width:'100%'}}>
         <div style={{textAlign:'center',marginBottom:32}}>
-          <div style={{fontSize:32,fontWeight:900,color:'#dc2626',letterSpacing:'.1em',marginBottom:6}}>{co.systemTitle || '統晉企業'}</div>
+          <div style={{fontSize:32,fontWeight:900,color:'#dc2626',letterSpacing:'.1em',marginBottom:6}}>{co.systemTitle || 'XX企業'}</div>
           <div style={{fontSize:12,color:'#666',letterSpacing:'.2em'}}>SERVICE  ·  RENTAL  ·  REPAIR</div>
         </div>
 
@@ -10871,5 +10871,6 @@ ReactDOM.render(<App />, document.getElementById("root"));
 </script>
 </body>
 </html>
+
 
 
