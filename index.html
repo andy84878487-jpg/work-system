@@ -1,11 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta name="description" content="業務系統 - 簽單、合約、收款管理">
-  <meta property="og:title" content="業務系統">
-  <meta property="og:description" content="簽單、合約、收款管理">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="icon-512.png">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#dc2626">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,6 +8,11 @@
   <meta name="apple-mobile-web-app-title" content="業務系統">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/png" href="icon-192.png">
+  <meta name="description" content="業務系統 - 簽單、合約、收款管理">
+  <meta property="og:title" content="業務系統">
+  <meta property="og:description" content="簽單、合約、收款管理">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="icon-512.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1088,7 +1088,9 @@ const IceForm = ({ initial, opts, onSave, onBack }) => {
 };
 
 const DetailSheet = ({ item, onEdit, onDelete, onClose }) => {
-  const chips = arr => (arr || []).map((t, i) => <span key={i} style={{ fontSize: 12, padding: "3px 10px", borderRadius: 10, background: "#1e1e1e", border: "1px solid #2e2e2e", color: "#fff" }}>{t}</span>);
+  // 防呆：陣列直接用、字串依「/」拆、其他都轉空陣列（避免歷史資料是字串時 .map() 噴錯黑屏）
+  const toArr = v => Array.isArray(v) ? v : (typeof v === 'string' && v ? v.split('/').map(x=>x.trim()).filter(Boolean) : []);
+  const chips = arr => toArr(arr).map((t, i) => <span key={i} style={{ fontSize: 12, padding: "3px 10px", borderRadius: 10, background: "#1e1e1e", border: "1px solid #2e2e2e", color: "#fff" }}>{t}</span>);
   const DRow = ({ label, val }) => val ? <div style={{ display: "flex", gap: 10, padding: "8px 0", borderBottom: "1px solid #1e1e1e" }}><span style={{ color: "#999", fontSize: 12, width: 80, flexShrink: 0 }}>{label}</span><span style={{ color: "#ccc", fontSize: 13 }}>{val}</span></div> : null;
   const pm = { "租金": { bg: "#166534", border: "#15803d" }, "租送租金": { bg: "#854d0e", border: "#a16207" }, "租送押金": { bg: "#854d0e", border: "#a16207" }, "售價": { bg: "#1e3a6e", border: "#1d4ed8" } };
   const priceRows = [["租金", item.rent], ["售價", item.price], ["租送租金", item.rentDel], ["租送押金", item.deposit]].filter(([, v]) => v);
@@ -4261,7 +4263,7 @@ function SignForm({onClose,onSubmit,crmData,machData,quoteDb,workOrders,editReco
           <div style={{background:WORK_DOC_COLOR,padding:'16px 18px',display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
             <div>
               <div style={{fontSize:8,fontWeight:800,letterSpacing:4,color:'rgba(255,255,255,.6)',marginBottom:3}}>SERVICE DOCUMENT</div>
-              <div style={{fontSize:18,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'XX企業有限公司'}</div>
+              <div style={{fontSize:18,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'統晉企業有限公司'}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,.6)',marginTop:2}}>{co.slogan||'製冰機、洗碗機｜出租、維修、買賣'}</div>
             </div>
             <div style={{textAlign:'right',flexShrink:0}}>
@@ -4671,7 +4673,7 @@ function WorkOrderViewer({rec, onSignStaff, onSignCust, onChangePay, onResign, e
         <div style={{background:SC,padding:'14px 18px',display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
           <div>
             <div style={{fontSize:8,fontWeight:800,letterSpacing:4,color:'rgba(255,255,255,.6)',marginBottom:3}}>SERVICE DOCUMENT</div>
-            <div style={{fontSize:17,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'XX企業有限公司'}</div>
+            <div style={{fontSize:17,fontWeight:900,letterSpacing:2,color:'#fff'}}>{co.name||'統晉企業有限公司'}</div>
             <div style={{fontSize:10,color:'rgba(255,255,255,.6)',marginTop:2}}>{co.slogan||'製冰機、洗碗機｜出租、維修、買賣'}</div>
           </div>
           <div style={{textAlign:'right',flexShrink:0}}>
@@ -5763,7 +5765,7 @@ async function generatePaymentListPDF({customer, kind, items, isCompany, company
   
   div.innerHTML = `
     <div style="text-align:center;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #000">
-      <div style="font-size:18px;font-weight:900;letter-spacing:3px">${co.name||'XX企業'}</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:3px">${co.name||'統晉企業'}</div>
       <div style="font-size:14px;font-weight:700;margin-top:6px">收款清單 — ${customer}</div>
       <div style="font-size:11px;color:#666;margin-top:4px">區間：${kind}（截至 ${today}）</div>
       ${subtitle}
@@ -7247,9 +7249,9 @@ function CompanySettingsPage(){
 
       <div style={{background:'#111',borderRadius:12,padding:'18px',border:'1px solid #222'}}>
         <label style={lbl}>公司名稱（合約 / 簽單抬頭用）</label>
-        <input value={data.name||''} onChange={e=>upd('name',e.target.value)} style={si} placeholder="XX企業有限公司"/>
+        <input value={data.name||''} onChange={e=>upd('name',e.target.value)} style={si} placeholder="統晉企業有限公司"/>
         <label style={lbl}>系統 TITLE（登入頁顯示）</label>
-        <input value={data.systemTitle||''} onChange={e=>upd('systemTitle',e.target.value)} style={si} placeholder="XX企業"/>
+        <input value={data.systemTitle||''} onChange={e=>upd('systemTitle',e.target.value)} style={si} placeholder="統晉企業"/>
         <label style={lbl}>副標 / 業務範圍（簽單、PDF 標頭用）</label>
         <input value={data.slogan||''} onChange={e=>upd('slogan',e.target.value)} style={si} placeholder="製冰機、洗碗機｜出租、維修、買賣"/>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
@@ -8785,7 +8787,7 @@ function LoginScreen({onLogin}){
     <div style={{position:'fixed',inset:0,background:'#0a0a0a',display:'flex',alignItems:'center',justifyContent:'center',padding:20,zIndex:9999}}>
       <div style={{maxWidth:380,width:'100%'}}>
         <div style={{textAlign:'center',marginBottom:32}}>
-          <div style={{fontSize:32,fontWeight:900,color:'#dc2626',letterSpacing:'.1em',marginBottom:6}}>{co.systemTitle || 'XX企業'}</div>
+          <div style={{fontSize:32,fontWeight:900,color:'#dc2626',letterSpacing:'.1em',marginBottom:6}}>{co.systemTitle || '統晉企業'}</div>
           <div style={{fontSize:12,color:'#666',letterSpacing:'.2em'}}>SERVICE  ·  RENTAL  ·  REPAIR</div>
         </div>
 
@@ -9485,11 +9487,13 @@ async function pullFromSheet(){
     if (dirtyIceKeys.has(compositeKey)) { stats.skipped++; return; }
     
     const existing = quote.iceMachines.find(q => q.brand === brand && q.model === model);
+    // 試算表上 chip 欄位是用「/」連接的字串，本地端要還原成陣列（DetailSheet 期望 array）
+    const splitArr = s => String(s||'').split('/').map(x=>x.trim()).filter(Boolean);
     const newRec = {
       brand, model,
-      iceType: row['冰型']||'', capacity: row['磅數']||'',
-      voltage: row['電壓']||'', cooling: row['散熱']||'',
-      coolant: row['冷媒']||'', iceStorage: row['儲冰量']||'',
+      iceType: splitArr(row['冰型']), capacity: splitArr(row['磅數']),
+      voltage: splitArr(row['電壓']), cooling: splitArr(row['散熱']),
+      coolant: splitArr(row['冷媒']), iceStorage: row['儲冰量']||'',
       width: '', depth: '', height: '',
       rent: row['租金']||'', rentSendMonths: row['租送 月數']||'',
       rentDel: row['租送 租金']||'', deposit: row['租送 押金']||'',
@@ -10871,6 +10875,3 @@ ReactDOM.render(<App />, document.getElementById("root"));
 </script>
 </body>
 </html>
-
-
-
