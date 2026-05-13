@@ -8975,7 +8975,7 @@ function collectAllData(){
     '繳租日': c.payDay||'', '付款方式': c.payMethod||'',
     '匯款帳號': c.bankAccount||'',
     '終止日期': c.terminatedDate||'',
-    '乙方簽章URL': c.partyBSig?(c.partyBSigUrl||'(待上傳)'):'',
+    '乙方簽章URL': c.partyBSig || '',
     'PDF URL': c.pdfUrl||'',
     '備註': c.note||''
   }));
@@ -9115,6 +9115,7 @@ function collectAllData(){
     '租送 押金': q.deposit||'',
     '售價': q.price||'',
     '寬深高': fmtSize(q.width, q.depth, q.height),
+    '儲冰量': q.iceStorage||'',
     '新機庫存': q.newStock||'', '待租庫存': q.rentStock||'',
     '停售': !!q.stopped, '附註': q.note||''
   }));
@@ -9728,7 +9729,12 @@ async function pullFromSheet(){
       ctType = existing?.contractType || 'rental';
     }
     
-    // 完整欄位映射（保留現有本地的私有欄位如 partyBSig）
+    // 完整欄位映射
+    // 乙方簽章：試算表上存的是 data URL (data:image/...)；本地的 partyBSig 也是 data URL。
+    //   - 試算表有值 → 同步到本地 (跨裝置都能看到簽名)
+    //   - 試算表空 → 保留本地原值 (避免覆蓋掉還沒推上去的)
+    const sheetSig = String(row['乙方簽章URL']||'').trim();
+    const partyBSig = sheetSig && sheetSig !== '(待上傳)' ? sheetSig : (existing?.partyBSig || '');
     const fields = {
       '合約號': id,
       contractType: ctType,
@@ -9751,6 +9757,7 @@ async function pullFromSheet(){
       terminatedDate: row['終止日期']||'',
       pdfUrl: row['PDF URL']||'',
       note: row['備註']||'',
+      partyBSig,
     };
     
     if (existing) {
